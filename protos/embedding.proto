@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+package com.ices.sh.embedding.rpc;
+
+option java_package = "com.ices.sh.embedding.rpc";
+option java_outer_classname = "GraphEmbeddingRpc";
+
+service GraphEmbeddingService {
+
+    // 预测头实体
+    rpc predictHead(PredictHeadRequest) returns (PredictPartResponse);
+
+    // 预测尾实体
+    rpc predictTail(PredictTailRequest) returns (PredictPartResponse);
+
+    // 预测关系类型
+    rpc predictRelation(PredictRelationRequest) returns (PredictPartResponse);
+
+    // 预测三元组是否正确
+    rpc predictTriple(PredictTripleRequest) returns (google.protobuf.BoolValue);
+
+    // 获取实体embedding
+    rpc getEntityEmbedding(GetEmbeddingRequest) returns (GetEmbeddingResponse);
+
+    // 获取关系embedding
+    rpc getRelationEmbedding(GetEmbeddingRequest) returns (GetEmbeddingResponse);
+}
+
+message GetEmbeddingRequest {
+    int64 gid = 1;
+    string modelName = 2;
+    string val = 3; // entity name or relation type
+}
+
+message GetEmbeddingResponse {
+    repeated double val = 1;
+}
+
+message PredictHeadRequest {
+    string tail = 1;
+    string relation = 2;
+    int32 k = 3;
+    int64 gid = 4;
+    string modelName = 5;
+}
+
+message PredictTailRequest {
+    string head = 1;
+    string relation = 2;
+    int32 k = 3;
+    int64 gid = 4;
+    string modelName = 5;
+}
+
+message PredictRelationRequest {
+    string head = 1;
+    string tail = 2;
+    int32 k = 3;
+    int64 gid = 4;
+    string modelName = 5;
+}
+
+message PredictPartResponse {
+    repeated string val = 1;
+}
+
+message PredictTripleRequest {
+    string head = 1;
+    string tail = 2;
+    string relation = 3;
+    float thresh = 4;
+    int64 gid = 5;
+    string modelName = 6;
+}
+

@@ -1,0 +1,33 @@
+{
+    "server": {
+        "host": "localhost",
+        "port": 18080,
+        "protocol": "http"
+    },
+    "grpc": {
+        "port": 50052
+    },
+    "rabbitmq": {
+        "queue_name": "trainJobQueue",
+        "host": "localhost",
+        "username": "root",
+        "password": "123456",
+        "port": "5673",
+        "durable": true,
+        "auto_ack": false,
+        "prefetch_count": 1
+    },
+    "mysql": {
+        "host": "localhost",
+        "port": 3306,
+        "database": "servicehouse",
+        "username": "root",
+        "password": "123456"
+    },
+    "path": {
+        "trainedmodels": "trainedmodels",
+        "benchmarks": "benchmarks/gspace",
+        "checkpoint": "checkpoints"
+    },
+    "update_interval": 60
+}
