@@ -82,8 +82,8 @@ class ModelPredictor:
         """
         h = self.entity2id_map[h]
         t = self.entity2id_map[t]
-        r = self.entity2id_map[r]
-        return self._predict_relation(h, t, r, thresh)
+        r = self.relation2id_map[r]
+        return self._predict_triple(h, t, r, thresh)
 
     def get_ent_embedding(self, ent: str):
         return self.ent_embeddings[self.entity2id_map[ent]]
@@ -103,7 +103,7 @@ class ModelPredictor:
         test_t = self._to_cuda(torch.LongTensor([t] * self.ent_tot), self.use_gpu)
         test_r = self._to_cuda(torch.LongTensor([r] * self.ent_tot), self.use_gpu)
         res = self._predict(test_h, test_t, test_r).reshape(-1).argsort()[:k]
-        return res
+        return list(res)
 
     def _predict_tail_entity(self, h: int, r: int, k: int) -> list:
         """
@@ -117,7 +117,7 @@ class ModelPredictor:
         test_t = self._to_cuda(torch.LongTensor(range(self.ent_tot)), self.use_gpu)
         test_r = self._to_cuda(torch.LongTensor([r] * self.ent_tot), self.use_gpu)
         res = self._predict(test_h, test_t, test_r).reshape(-1).argsort()[:k]
-        return res
+        return list(res)
 
     def _predict_relation(self, h: int, t: int, k: int) -> list:
         """
@@ -131,7 +131,7 @@ class ModelPredictor:
         test_t = self._to_cuda(torch.LongTensor([t] * self.rel_tot), self.use_gpu)
         test_r = self._to_cuda(torch.LongTensor(range(self.rel_tot)), self.use_gpu)
         res = self._predict(test_h, test_t, test_r).reshape(-1).argsort()[:k]
-        return res
+        return list(res)
 
     def _predict_triple(self, h: int, t: int, r: int, thresh: float) -> bool:
         """
@@ -179,7 +179,9 @@ class ModelPredictor:
             rows = f.read().split('\n')[1:]
             for row in rows:
                 items = row.split('\t')
-                entity = items[0]
+                if len(items) != 2:
+                    continue
+                entity = str(items[0])
                 id = int(items[1])
                 entity2id_map[entity] = id
                 id2entity_map[id] = entity
@@ -187,7 +189,9 @@ class ModelPredictor:
             rows = f.read().split('\n')[1:]
             for row in rows:
                 items = row.split('\t')
-                relation = items[0]
+                if len(items) != 2:
+                    continue
+                relation = str(items[0])
                 id = int(items[1])
                 relation2id_map[relation] = id
                 id2relation_map[id] = relation

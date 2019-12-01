@@ -16,31 +16,37 @@ class EmbeddingServicer(embedding_pb2_grpc.GraphEmbeddingServiceServicer):
         self.model_loader = model_loader
 
     def predictHead(self, request: embedding_pb2.PredictHeadRequest, context) -> embedding_pb2.PredictPartResponse:
+        print('[%s] predictHead\n' % time.time(), request)
         model = self.model_loader.get_model(request.gid, request.modelName)
         res = model.predict_head_entity(request.tail, request.relation, request.k)
         return embedding_pb2.PredictPartResponse(val=res)
 
     def predictTail(self, request: embedding_pb2.PredictTailRequest, context) -> embedding_pb2.PredictPartResponse:
+        print('[%s] predictTail\n' % time.time(), request)
         model = self.model_loader.get_model(request.gid, request.modelName)
         res = model.predict_tail_entity(request.head, request.relation, request.k)
         return embedding_pb2.PredictPartResponse(val=res)
 
     def predictRelation(self, request: embedding_pb2.PredictRelationRequest, context) -> embedding_pb2.PredictPartResponse:
+        print('[%s] predictRelation\n' % time.time(), request)
         model = self.model_loader.get_model(request.gid, request.modelName)
         res = model.predict_relation(request.head, request.tail, request.k)
         return embedding_pb2.PredictPartResponse(val=res)
 
     def predictTriple(self, request: embedding_pb2.PredictTripleRequest, context) -> wrappers.BoolValue:
+        print('[%s] predictTriple\n' % time.time(), request)
         model = self.model_loader.get_model(request.gid, request.modelName)
         res = model.predict_triple(request.head, request.tail, request.relation, request.thresh)
         return wrappers.BoolValue(value=res)
 
     def getEntityEmbedding(self, request: embedding_pb2.GetEmbeddingRequest, context) -> embedding_pb2.GetEmbeddingResponse:
+        print('[%s] getEntityEmbedding\n' % time.time(), request)
         model = self.model_loader.get_model(request.gid, request.modelName)
         res = model.get_ent_embedding(request.val)
         return embedding_pb2.GetEmbeddingResponse(val=res)
 
     def getRelationEmbedding(self, request: embedding_pb2.GetEmbeddingRequest, context) -> embedding_pb2.GetEmbeddingResponse:
+        print('[%s] getRelationEmbedding\n' % time.time(), request)
         model = self.model_loader.get_model(request.gid, request.modelName)
         res = model.get_rel_embedding(request.val)
         return embedding_pb2.GetEmbeddingResponse(val=res)
@@ -79,5 +85,10 @@ if __name__ == '__main__':
     executor = futures.ThreadPoolExecutor(max_workers=2)
     executor.submit(update_model, model_loader)
     executor.submit(serve, model_loader)
+    try:
+        while True:
+            time.sleep(_ONE_DAY_IN_SECONDS)
+    except KeyboardInterrupt:
+        print('stop main thread...')
 
 

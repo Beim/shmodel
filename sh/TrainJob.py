@@ -18,8 +18,8 @@ class TrainJob:
         self.gspace_id = gspace_id
         self.uuid = uuid
 
-        benchmarks = config_loader['path']['benchmarks']
-        checkpoint = config_loader['path']['checkpoint']
+        benchmarks = config_loader.get_config()['path']['benchmarks']
+        checkpoint = config_loader.get_config()['path']['checkpoint']
 
         self.BENCHMARK_DIRPATH = '%s/../%s/%s' % (curr_dir, benchmarks, gspace_id)
         self.ENTITY2ID_PATH = '%s/entity2id.txt' % self.BENCHMARK_DIRPATH

@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 
 from config.config_loader import config_loader
 from Utils import mysql_utils
@@ -17,7 +18,7 @@ class ModelLoader:
         self.model_map = self.load()
 
     def get_model(self, gid: int, model_name: str) -> ModelPredictor:
-        return self.model_map[(gid, model_name)]
+        return self.model_map[(str(gid), model_name)]
 
     def check_update(self) -> bool:
         """
@@ -111,7 +112,7 @@ class ModelLoader:
         response = mysql_utils.query('select gid, modelname, updated from gspacemodelparam where available=true')
         result = set()
         for item in response:
-            result.add(item['gid'], item['modelname'], item['updated'])
+            result.add( (str(item['gid']), item['modelname'], str(int(item['updated'].timestamp()))) )
         return result
 
     def _parse_param_file_name(self, filename: str) -> (str, str, int):
