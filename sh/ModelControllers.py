@@ -1,22 +1,22 @@
 import os
-import json
 
 from openke.config import Trainer, Tester
 from openke.module.model import TransE
 from openke.module.loss import MarginLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
+from config.config_loader import config_loader
 
-from Utils import RequestUtils
 
 class BaseModelController:
 
-    def __init__(self, benchmark_dir: str, checkpoint_dir: str):
+    def __init__(self, benchmark_dir: str, checkpoint_dir: str, use_gpu: bool = True):
         if not os.path.exists(checkpoint_dir):
             os.makedirs(checkpoint_dir)
             # shutil.rmtree(checkpoint_dir)
         self.checkpoint_path = '%s/%s.ckpt' % (checkpoint_dir, self.model_name)
         self.parameters_path = '%s/%s.param' % (checkpoint_dir, self.model_name)
+        self.use_gpu = use_gpu
 
     def train(self) -> None:
         raise NotImplementedError
@@ -29,8 +29,8 @@ class TranseController(BaseModelController):
 
     model_name = 'transe'
 
-    def __init__(self, benchmark_dir: str, checkpoint_dir: str):
-        super(TranseController, self).__init__(benchmark_dir, checkpoint_dir)
+    def __init__(self, benchmark_dir: str, checkpoint_dir: str, use_gpu: bool = True):
+        super(TranseController, self).__init__(benchmark_dir, checkpoint_dir, use_gpu)
 
         self.train_dataloader = TrainDataLoader(
             in_path=benchmark_dir + '/',
@@ -61,14 +61,14 @@ class TranseController(BaseModelController):
         )
 
     def train(self) -> None:
-        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=20, alpha=1.0, use_gpu=True)
+        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=20, alpha=1.0, use_gpu=self.use_gpu)
         trainer.run()
         self.transe.save_checkpoint(self.checkpoint_path)
         self.transe.save_parameters(self.parameters_path)
 
     def test(self) -> None:
         self.transe.load_checkpoint(self.checkpoint_path)
-        tester = Tester(model = self.transe, data_loader = self.test_dataloader, use_gpu = True)
+        tester = Tester(model = self.transe, data_loader = self.test_dataloader, use_gpu=self.use_gpu)
         tester.run_link_prediction(type_constrain = False)
 
 

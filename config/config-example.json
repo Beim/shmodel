@@ -29,5 +29,6 @@
         "benchmarks": "benchmarks/gspace",
         "checkpoint": "checkpoints"
     },
-    "update_interval": 60
+    "update_interval": 5,
+    "gpu": true
 }

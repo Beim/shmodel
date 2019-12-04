@@ -1,6 +1,4 @@
 import os
-import json
-import datetime
 
 from config.config_loader import config_loader
 from Utils import mysql_utils
@@ -11,11 +9,13 @@ curr_dir = os.path.split(os.path.abspath(__file__))[0]
 
 class ModelLoader:
 
-    def __init__(self):
+    def __init__(self, use_gpu: bool = True):
+        self.use_gpu = use_gpu
         self.models_dir = '%s/../%s' % (curr_dir, config_loader.get_config()['path']['trainedmodels'])
         if not os.path.exists(self.models_dir):
             os.makedirs(self.models_dir)
         self.model_map = self.load()
+
 
     def get_model(self, gid: int, model_name: str) -> ModelPredictor:
         return self.model_map[(str(gid), model_name)]
@@ -64,7 +64,8 @@ class ModelLoader:
             load_map[(gid, modelname)] = ModelPredictor(modelname,
                                                         paramters_path,
                                                         entity2id_path,
-                                                        relation2id_path)
+                                                        relation2id_path,
+                                                        self.use_gpu)
         return load_map
 
 

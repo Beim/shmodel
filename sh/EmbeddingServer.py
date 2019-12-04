@@ -69,7 +69,7 @@ def serve(model_loader: ModelLoader):
         server.stop(0)
 
 
-def update_model(model_loader: ModelLoader):
+def update_model(model_loader: ModelLoader, use_gpu: bool = True):
     try:
         while True:
             time.sleep(config_loader.get_config()['update_interval'])
@@ -81,7 +81,7 @@ def update_model(model_loader: ModelLoader):
 
 
 if __name__ == '__main__':
-    model_loader = ModelLoader()
+    model_loader = ModelLoader(config_loader.get_config()['gpu'])
     executor = futures.ThreadPoolExecutor(max_workers=2)
     executor.submit(update_model, model_loader)
     executor.submit(serve, model_loader)

@@ -58,7 +58,7 @@ class TrainJobQueueReceiver:
         gspace_id = info['gid']
         uuid = info['uuid']
         try:
-            TrainJob(train_triples, model_name, gspace_id, uuid).run()
+            TrainJob(train_triples, model_name, gspace_id, uuid, use_gpu=config_loader.get_config()['gpu']).run()
             ch.basic_ack(delivery_tag=method.delivery_tag)
             print('ack %s %d' % (model_name, gspace_id))
         except Exception as e:

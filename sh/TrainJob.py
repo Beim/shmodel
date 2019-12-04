@@ -12,11 +12,12 @@ curr_dir = os.path.split(os.path.abspath(__file__))[0]
 
 class TrainJob:
 
-    def __init__(self, triples: list, model_name: str, gspace_id: int, uuid: str):
+    def __init__(self, triples: list, model_name: str, gspace_id: int, uuid: str, use_gpu: bool = True):
         self.triples = triples
         self.model_name = model_name
         self.gspace_id = gspace_id
         self.uuid = uuid
+        self.use_gpu = use_gpu
 
         benchmarks = config_loader.get_config()['path']['benchmarks']
         checkpoint = config_loader.get_config()['path']['checkpoint']
@@ -40,7 +41,7 @@ class TrainJob:
         :return:
         """
         self._prepare_data(self.triples, self.gspace_id)
-        model = self.model_constructor(self.BENCHMARK_DIRPATH, self.CHECKPOINT_DIRPATH)
+        model = self.model_constructor(self.BENCHMARK_DIRPATH, self.CHECKPOINT_DIRPATH, self.use_gpu)
         model.train()
         model.test()
         self._upload_param(model.parameters_path)
