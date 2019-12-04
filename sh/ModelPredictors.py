@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import json
 
-from openke.module.model import Model, TransE
+from openke.module.model import Model, TransE, TransH, TransD, TransR
 
 
 class ModelPredictor:
@@ -200,6 +200,8 @@ class ModelPredictor:
     def _get_model_constructor(self, model_name: str) -> Model:
         models = {
             'transe': TransE,
+            'transh': TransH,
+            'transd': TransD,
         }
         if model_name in models:
             return models[model_name]
