@@ -46,6 +46,7 @@ class MysqlUtils:
         with self.db.cursor() as cursor:
             cursor.execute(sql, args)
             result = list(cursor.fetchall())
+        self.db.commit()
         return result
 
 
