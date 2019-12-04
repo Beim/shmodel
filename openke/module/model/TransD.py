@@ -5,7 +5,7 @@ from .Model import Model
 
 class TransD(Model):
 
-	def __init__(self, ent_tot, rel_tot, dim_e = 100, dim_r = 100, p_norm = 1, norm_flag = True, margin = None, epsilon = None):
+	def __init__(self, ent_tot, rel_tot, dim_e = 200, dim_r = 200, p_norm = 1, norm_flag = True, margin = None, epsilon = None):
 		super(TransD, self).__init__(ent_tot, rel_tot)
 		
 		self.dim_e = dim_e

@@ -50,7 +50,6 @@ class TranseController(BaseModelController):
         self.transx = TransE(
             ent_tot = self.ent_tot,
             rel_tot = self.rel_tot,
-            dim = 200,
             p_norm = 1,
             norm_flag = True)
 
@@ -97,7 +96,6 @@ class TranshController(BaseModelController):
         self.transx = TransH(
             ent_tot = self.ent_tot,
             rel_tot = self.rel_tot,
-            dim = 200,
             p_norm = 1,
             norm_flag = True)
 
@@ -144,8 +142,6 @@ class TransdController(BaseModelController):
         self.transx = TransD(
             ent_tot = self.ent_tot,
             rel_tot = self.rel_tot,
-            dim_e=200,
-            dim_r=200,
             p_norm = 1,
             norm_flag = True)
 

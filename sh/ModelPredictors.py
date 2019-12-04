@@ -19,7 +19,6 @@ class ModelPredictor:
         self.model = constructor(
             ent_tot=self.ent_tot,
             rel_tot=self.rel_tot,
-            dim=200,
             p_norm=1,
             norm_flag=True)
         if use_gpu:
