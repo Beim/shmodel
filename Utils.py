@@ -34,6 +34,7 @@ class MysqlUtils:
                                   database=mysql_config['database'],
                                   user=mysql_config['username'],
                                   password=mysql_config['password'],
+                                  max_allowed_packet=1024*1024*1024,
                                   cursorclass=pymysql.cursors.DictCursor)
 
     def execute(self, sql: str, args: list = None, expect_rows: int = 1) -> bool:

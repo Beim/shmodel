@@ -52,7 +52,11 @@ class TrainJobQueueReceiver:
         """
         # {'trainTriples': [[2, 0, 'like'], [2, 1, 'like']], 'modelName': 'TransE', 'gid': 1}
         info = json.loads(body, encoding='utf-8')
-        print(info)
+        print({
+            'modelName': info['modelName'],
+            'gid': info['gid'],
+            'trainTriplesLen': len(info['trainTriples'])
+        })
         train_triples = info['trainTriples']
         model_name = info['modelName']
         gspace_id = info['gid']
