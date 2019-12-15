@@ -85,12 +85,13 @@ class ModelLoader:
             paramters_path = '%s/%s' % (self.models_dir, self._make_param_file_name(gid, modelname, updated))
             entity2id_path = '%s/%s' % (self.models_dir, self._make_entity2id_file_name(gid, modelname, updated))
             relation2id_path = '%s/%s' % (self.models_dir, self._make_relation2id_file_name(gid, modelname, updated))
-            with open(paramters_path, 'w') as f:
-                f.write(response['params'])
-            with open(entity2id_path, 'w') as f:
-                f.write(response['entity2id'])
-            with open(relation2id_path, 'w') as f:
-                f.write(response['relation2id'])
+            if response['params'] != None and response['entity2id'] != None and response['relation2id'] != None:
+                with open(paramters_path, 'w') as f:
+                    f.write(response['params'])
+                with open(entity2id_path, 'w') as f:
+                    f.write(response['entity2id'])
+                with open(relation2id_path, 'w') as f:
+                    f.write(response['relation2id'])
 
     def _get_embed_infos(self) -> set:
         """
