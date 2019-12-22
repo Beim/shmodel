@@ -40,6 +40,21 @@ class TrainJob:
         S4 上传结果
         :return:
         """
+        # TODO 解决0数据报错的bug
+        """
+        {'trainTriples': [], 'modelName': 'transe', 'gid': 4, 'uuid': '2f6963fc-59c9-4b2b-933c-1b9714c6120f'}
+        train num 1, test num 1
+        #train: 0, #valid: 0, #test: 0
+        Input Files Path : /root/shmodel_copy/sh/../benchmarks/gspace/4/
+        The toolkit is importing datasets.
+        The total of relations is 0.
+        The total of entities is 0.
+        The total of train triples is 1.
+        Input Files Path : /root/shmodel_copy/sh/../benchmarks/gspace/4/
+        The total of test triples is 0.
+        The total of valid triples is 0.
+        bin/train_server.sh: line 2: 38132 Segmentation fault      PYTHONPATH=. python sh/TrainJobQueueReceiver.py
+        """
         self._prepare_data(self.triples, self.gspace_id)
         model = self.model_constructor(self.BENCHMARK_DIRPATH, self.CHECKPOINT_DIRPATH, self.use_gpu)
         model.train()
@@ -47,14 +62,30 @@ class TrainJob:
         self._upload_param(model.parameters_path)
 
     def _upload_param(self, param_path: str) -> None:
+        # TODO 使用上传文件方式，传入mysql 的param 文件不能过大
+
+        print('prepare upload param...')
         with open(param_path, 'r') as f:
             params = f.read()
         with open(self.ENTITY2ID_PATH, 'r') as f:
             entity2id = f.read()
         with open(self.RELATION2ID_PATH, 'r') as f:
             relation2id = f.read()
-        mysql_utils.execute('update gspacemodelparam set available=true, params=%s, entity2id=%s, relation2id=%s where gid=%s and modelname=%s',
-                            [params, entity2id, relation2id, self.gspace_id, self.model_name])
+
+        # TODO 解决长时间未使用断开连接的bug
+        # mysql_utils.execute('update gspacemodelparam set available=true, params=%s, entity2id=%s, relation2id=%s where gid=%s and modelname=%s',
+        #                     [params, entity2id, relation2id, self.gspace_id, self.model_name])
+        mysql_utils.execute(
+            'update gspacemodelparam set available=true, entity2id=%s where gid=%s and modelname=%s',
+            [entity2id,  self.gspace_id, self.model_name])
+        print('update entity2id')
+        mysql_utils.execute(
+            'update gspacemodelparam set available=true, relation2id=%s where gid=%s and modelname=%s',
+            [relation2id, self.gspace_id, self.model_name])
+        print('update relation2id')
+        mysql_utils.execute(
+            'update gspacemodelparam set available=true, params=%s where gid=%s and modelname=%s',
+            [params, self.gspace_id, self.model_name])
         print('upload_param gid[%d] model_name[%s]' % (self.gspace_id, self.model_name))
         # request_path = 'embed/gspace/%d/model/%s' % (self.gspace_id, self.model_name)
         # data = {

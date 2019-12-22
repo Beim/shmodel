@@ -60,7 +60,7 @@ class TranseController(BaseModelController):
         )
 
     def train(self) -> None:
-        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=100, alpha=1.0, use_gpu=self.use_gpu)
+        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=20, alpha=1.0, use_gpu=self.use_gpu)
         trainer.run()
         self.transx.save_checkpoint(self.checkpoint_path)
         self.transx.save_parameters(self.parameters_path)
@@ -106,7 +106,7 @@ class TranshController(BaseModelController):
         )
 
     def train(self) -> None:
-        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=50, alpha=0.5, use_gpu=self.use_gpu)
+        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=20, alpha=0.5, use_gpu=self.use_gpu)
         trainer.run()
         self.transx.save_checkpoint(self.checkpoint_path)
         self.transx.save_parameters(self.parameters_path)
@@ -152,7 +152,7 @@ class TransdController(BaseModelController):
         )
 
     def train(self) -> None:
-        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=100, alpha=1.0, use_gpu=self.use_gpu)
+        trainer = Trainer(model=self.model, data_loader=self.train_dataloader, train_times=20, alpha=1.0, use_gpu=self.use_gpu)
         trainer.run()
         self.transx.save_checkpoint(self.checkpoint_path)
         self.transx.save_parameters(self.parameters_path)
