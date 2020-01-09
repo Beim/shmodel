@@ -8,7 +8,7 @@ Trans 模型在线训练&部署
 - python3
 - pytorch
 - rabbitmq 3.8
-- mysql 3.5
+- mysql 5.7
 
 # 使用
 
