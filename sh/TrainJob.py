@@ -55,6 +55,11 @@ class TrainJob:
         The total of valid triples is 0.
         bin/train_server.sh: line 2: 38132 Segmentation fault      PYTHONPATH=. python sh/TrainJobQueueReceiver.py
         """
+        import time
+        print('in train job')
+        time.sleep(5)
+        print('finish trian job')
+        return;
         self._prepare_data(self.triples, self.gspace_id)
         model = self.model_constructor(self.BENCHMARK_DIRPATH, self.CHECKPOINT_DIRPATH, self.use_gpu)
         model.train()
