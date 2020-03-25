@@ -1,18 +1,27 @@
 {
+    "zkhost": "127.0.0.1:2181",
+    "host": "127.0.0.1",
+    "port": 18005,
+    "train_service_path": "/model/train",
+    "service_monitor": {
+        "zkpath": "/monitor",
+        "host": "127.0.0.1",
+        "port": 8001
+    },
     "server": {
-        "host": "",
-        "port": 18080,
+        "host": "127.0.0.1",
+        "port": 33004,
         "protocol": "http"
     },
     "grpc": {
-        "port": 50052
+        "port": 8000
     },
     "rabbitmq": {
         "queue_name": "trainJobQueue",
         "host": "localhost",
         "username": "root",
-        "password": "123456",
-        "port": "5673",
+        "password": "112223334",
+        "port": "5672",
         "durable": true,
         "auto_ack": false,
         "prefetch_count": 1
@@ -22,7 +31,7 @@
         "port": 3306,
         "database": "servicehouse",
         "username": "root",
-        "password": "123456"
+        "password": "112223334"
     },
     "path": {
         "trainedmodels": "trainedmodels",
@@ -30,5 +39,5 @@
         "checkpoint": "checkpoints"
     },
     "update_interval": 5,
-    "gpu": true
+    "gpu": false
 }
