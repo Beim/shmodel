@@ -54,8 +54,8 @@ def train_job_run():
         uid = args['uid']
         tjr.set_availability(False)
         start_time = time.time()
-        # TrainJob(train_triples, model_name, gspace_id, uuid, use_gpu=config_loader.get_config()['gpu']).run()
-        time.sleep(10)
+        TrainJob(train_triples, model_name, gspace_id, uuid, use_gpu=config_loader.get_config()['gpu']).run()
+        # time.sleep(10)
         end_time = time.time()
         tjr.set_availability(True)
 
