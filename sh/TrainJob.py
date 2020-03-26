@@ -55,7 +55,6 @@ class TrainJob:
         The total of valid triples is 0.
         bin/train_server.sh: line 2: 38132 Segmentation fault      PYTHONPATH=. python sh/TrainJobQueueReceiver.py
         """
-        import time
         print('in train job')
         self._prepare_data(self.triples, self.gspace_id)
         model = self.model_constructor(self.BENCHMARK_DIRPATH, self.CHECKPOINT_DIRPATH, self.use_gpu)
@@ -63,6 +62,7 @@ class TrainJob:
         model.test()
         self._upload_param(model.parameters_path)
         print('finish trian job')
+        return
 
     def _upload_param(self, param_path: str) -> None:
         # TODO 使用上传文件方式，传入mysql 的param 文件不能过大
