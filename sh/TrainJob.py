@@ -78,18 +78,27 @@ class TrainJob:
         # TODO 解决长时间未使用断开连接的bug
         # mysql_utils.execute('update gspacemodelparam set available=true, params=%s, entity2id=%s, relation2id=%s where gid=%s and modelname=%s',
         #                     [params, entity2id, relation2id, self.gspace_id, self.model_name])
+
+        print('params len = %d' % len(params))
         mysql_utils.execute(
-            'update gspacemodelparam set available=true, entity2id=%s where gid=%s and modelname=%s',
+            'update gspacemodelparam set params=%s where gid=%s and modelname=%s',
+            [params, self.gspace_id, self.model_name])
+        print('upload_param gid[%d] model_name[%s]' % (self.gspace_id, self.model_name))
+
+        mysql_utils.execute(
+            'update gspacemodelparam set entity2id=%s where gid=%s and modelname=%s',
             [entity2id,  self.gspace_id, self.model_name])
         print('update entity2id')
         mysql_utils.execute(
-            'update gspacemodelparam set available=true, relation2id=%s where gid=%s and modelname=%s',
+            'update gspacemodelparam set relation2id=%s where gid=%s and modelname=%s',
             [relation2id, self.gspace_id, self.model_name])
         print('update relation2id')
+
+
         mysql_utils.execute(
-            'update gspacemodelparam set available=true, params=%s where gid=%s and modelname=%s',
-            [params, self.gspace_id, self.model_name])
-        print('upload_param gid[%d] model_name[%s]' % (self.gspace_id, self.model_name))
+            'update gspacemodelparam set available=true where gid=%s and modelname=%s',
+            [self.gspace_id, self.model_name])
+        print('update available=true')
         # request_path = 'embed/gspace/%d/model/%s' % (self.gspace_id, self.model_name)
         # data = {
         #     'uuid': self.uuid,
