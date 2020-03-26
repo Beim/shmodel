@@ -57,14 +57,12 @@ class TrainJob:
         """
         import time
         print('in train job')
-        time.sleep(5)
-        print('finish trian job')
-        return;
         self._prepare_data(self.triples, self.gspace_id)
         model = self.model_constructor(self.BENCHMARK_DIRPATH, self.CHECKPOINT_DIRPATH, self.use_gpu)
         model.train()
         model.test()
         self._upload_param(model.parameters_path)
+        print('finish trian job')
 
     def _upload_param(self, param_path: str) -> None:
         # TODO 使用上传文件方式，传入mysql 的param 文件不能过大
