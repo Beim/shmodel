@@ -87,12 +87,19 @@ class Trainer(object):
 		print("Finish initializing...")
 		
 		training_range = tqdm(range(self.train_times))
+		last_res = -1.0
+		finish_train = False
 		for epoch in training_range:
+			if finish_train:
+				continue
 			res = 0.0
 			for data in self.data_loader:
 				loss = self.train_one_step(data)
 				res += loss
 			training_range.set_description("Epoch %d | loss: %f" % (epoch, res))
+			if last_res > 0 and res - last_res < 0.1 and res - last_res > -0.1:
+				finish_train = True
+			last_res = res
 			
 			if self.save_steps and self.checkpoint_dir and (epoch + 1) % self.save_steps == 0:
 				print("Epoch %d has finished, saving..." % (epoch))
