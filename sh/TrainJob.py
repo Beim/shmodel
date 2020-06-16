@@ -40,7 +40,6 @@ class TrainJob:
         S4 上传结果
         :return:
         """
-        # TODO 解决0数据报错的bug
         """
         {'trainTriples': [], 'modelName': 'transe', 'gid': 4, 'uuid': '2f6963fc-59c9-4b2b-933c-1b9714c6120f'}
         train num 1, test num 1
@@ -56,6 +55,9 @@ class TrainJob:
         bin/train_server.sh: line 2: 38132 Segmentation fault      PYTHONPATH=. python sh/TrainJobQueueReceiver.py
         """
         print('in train job')
+        if len(self.triples) == 0:
+            print('no training data')
+            return
         self._prepare_data(self.triples, self.gspace_id)
         model = self.model_constructor(self.BENCHMARK_DIRPATH, self.CHECKPOINT_DIRPATH, self.use_gpu)
         model.train()
@@ -74,10 +76,6 @@ class TrainJob:
             entity2id = f.read()
         with open(self.RELATION2ID_PATH, 'r') as f:
             relation2id = f.read()
-
-        # TODO 解决长时间未使用断开连接的bug
-        # mysql_utils.execute('update gspacemodelparam set available=true, params=%s, entity2id=%s, relation2id=%s where gid=%s and modelname=%s',
-        #                     [params, entity2id, relation2id, self.gspace_id, self.model_name])
 
         print('params len = %d' % len(params))
         mysql_utils.execute(
